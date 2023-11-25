@@ -1,10 +1,10 @@
 import {useState, ChangeEvent} from "react";
 import ProductCard from "./components/ProductCard";
-import {formInputsList, productList} from "./components/data";
-import MyDialog from "./components/ui/Modal";
-import Button from "./components/ui/Button";
-import Input from "./components/ui/Input";
-import {IProduct} from "./components/interfaces";
+import {formInputsList, productList} from "./data";
+import MyDialog from "./ui/Modal";
+import Button from "./ui/Button";
+import Input from "./ui/Input";
+import {IProduct} from "./interfaces";
 // Alt + shift + o
 function App() {
   // ** States

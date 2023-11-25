@@ -1,7 +1,7 @@
 import {txtSlicer} from "../utils/functions";
 import Image from "./Image";
-import {IProduct} from "./interfaces";
-import Button from "./ui/Button";
+import {IProduct} from "../interfaces";
+import Button from "../ui/Button";
 
 interface IProps {
   product: IProduct;
