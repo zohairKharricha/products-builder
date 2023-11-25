@@ -46,19 +46,11 @@ function App() {
         {input.label}
       </label>
 
-      {/* LINE BELLOW IS WRONG NOW FIX IT */}
-      {/* <Input
-        type={input.type}
-        id={input.id}
-        name={input.name}
-        value={product[""]}
-        onChange={onChangeHandler}
-      /> */}
       <Input
         type={input.type}
         id={input.id}
         name={input.name}
-        value={""}
+        value={product[input.name]}
         onChange={onChangeHandler}
       />
     </div>
