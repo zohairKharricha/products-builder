@@ -1,12 +1,24 @@
-import {useState} from "react";
+import {useState, ChangeEvent} from "react";
 import ProductCard from "./components/ProductCard";
 import {formInputsList, productList} from "./components/data";
 import MyDialog from "./components/ui/Modal";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
+import {IProduct} from "./components/interfaces";
 // Alt + shift + o
 function App() {
   // ** States
+  const [product, setProduct] = useState<IProduct>({
+    title: "",
+    description: "",
+    imageURL: "",
+    price: "",
+    colors: [],
+    category: {
+      name: "",
+      imageURL: "",
+    },
+  });
   const [isOpen, setIsOpen] = useState(false);
 
   // ** Handlers
@@ -16,6 +28,9 @@ function App() {
 
   function openModal() {
     setIsOpen(true);
+  }
+  function onChangeHandler(e: ChangeEvent<HTMLInputElement>) {
+    setProduct({...product, [e.target.name]: e.target.value});
   }
   // ** Renders
   const renderProductList = productList.map((product) => (
@@ -31,7 +46,21 @@ function App() {
         {input.label}
       </label>
 
-      <Input type={input.type} id={input.id} name={input.name} />
+      {/* LINE BELLOW IS WRONG NOW FIX IT */}
+      {/* <Input
+        type={input.type}
+        id={input.id}
+        name={input.name}
+        value={product[""]}
+        onChange={onChangeHandler}
+      /> */}
+      <Input
+        type={input.type}
+        id={input.id}
+        name={input.name}
+        value={""}
+        onChange={onChangeHandler}
+      />
     </div>
   ));
   return (
