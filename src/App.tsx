@@ -1,8 +1,9 @@
 import {useState} from "react";
 import ProductCard from "./components/ProductCard";
-import {productList} from "./components/data";
+import {formInputsList, productList} from "./components/data";
 import MyDialog from "./components/ui/Modal";
 import Button from "./components/ui/Button";
+import Input from "./components/ui/Input";
 // Alt + shift + o
 function App() {
   // ** States
@@ -19,6 +20,19 @@ function App() {
   // ** Renders
   const renderProductList = productList.map((product) => (
     <ProductCard key={product.id} product={product} />
+  ));
+
+  const renderFormInputList = formInputsList.map((input) => (
+    <div key={input.id} className="flex flex-col ">
+      <label
+        htmlFor={input.id}
+        className="mb-[2px] text-sm font-medium text-gray-700"
+      >
+        {input.label}
+      </label>
+
+      <Input type={input.type} id={input.id} name={input.name} />
+    </div>
   ));
   return (
     <main className="container  ">
@@ -37,17 +51,21 @@ function App() {
         closeModal={closeModal}
         title="Add A New Product"
       >
-        <div className="flex items-center space-x-3">
-          <Button className="  bg-indigo-700 hover:bg-indigo-800">
-            Sumbit
-          </Button>
-          <Button
-            onClick={() => closeModal()}
-            className="bg-gray-300 hover:bg-gray-400"
-          >
-            Cancel
-          </Button>
-        </div>
+        <form className="space-y-3">
+          {renderFormInputList}
+
+          <div className="flex items-center space-x-3">
+            <Button className="  bg-indigo-700 hover:bg-indigo-800">
+              Sumbit
+            </Button>
+            <Button
+              onClick={() => closeModal()}
+              className="bg-gray-300 hover:bg-gray-500"
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
       </MyDialog>
     </main>
   );
