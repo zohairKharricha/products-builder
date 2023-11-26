@@ -1,14 +1,15 @@
-import {useState, ChangeEvent} from "react";
+import {useState, ChangeEvent, FormEvent} from "react";
 import ProductCard from "./components/ProductCard";
 import {formInputsList, productList} from "./data";
 import MyDialog from "./ui/Modal";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
 import {IProduct} from "./interfaces";
+import {productValidation} from "./validation";
+import ErrorMessage from "./components/ErrorMessage";
 // Alt + shift + o
 function App() {
-  // ** States
-  const [product, setProduct] = useState<IProduct>({
+  const defaultProductObj = {
     title: "",
     description: "",
     imageURL: "",
@@ -18,12 +19,21 @@ function App() {
       name: "",
       imageURL: "",
     },
-  });
+  };
+  // ** States
+  const [product, setProduct] = useState<IProduct>(defaultProductObj);
   const [isOpen, setIsOpen] = useState(false);
+  const [errors, setErrors] = useState({
+    title: "",
+    description: "",
+    imageURL: "",
+    price: "",
+  });
 
   // ** Handlers
   function closeModal() {
     setIsOpen(false);
+    setProduct(defaultProductObj);
   }
 
   function openModal() {
@@ -31,6 +41,30 @@ function App() {
   }
   function onChangeHandler(e: ChangeEvent<HTMLInputElement>) {
     setProduct({...product, [e.target.name]: e.target.value});
+    setErrors({...errors, [e.target.name]: ""});
+  }
+  function submitHandler(e: FormEvent<HTMLFormElement>) {
+    const {title, description, imageURL, price} = product;
+    e.preventDefault();
+    const errors = productValidation({
+      title,
+      description,
+      imageURL,
+      price,
+    });
+
+    console.log(errors);
+
+    // ** check if any property has a value of "" && check if all properties have a value of ""
+    const hasErrorMessage =
+      Object.values(errors).some((value) => value === "") &&
+      Object.values(errors).every((value) => value === "");
+
+    if (!hasErrorMessage) {
+      setErrors(errors);
+      return;
+    }
+    console.log("Send This Product To Our Server");
   }
   // ** Renders
   const renderProductList = productList.map((product) => (
@@ -53,6 +87,7 @@ function App() {
         value={product[input.name]}
         onChange={onChangeHandler}
       />
+      <ErrorMessage msg={errors[input.name]} />
     </div>
   ));
   return (
@@ -72,7 +107,7 @@ function App() {
         closeModal={closeModal}
         title="Add A New Product"
       >
-        <form className="space-y-3">
+        <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputList}
 
           <div className="flex items-center space-x-3">
@@ -80,7 +115,7 @@ function App() {
               Sumbit
             </Button>
             <Button
-              onClick={() => closeModal()}
+              onClick={closeModal}
               className="bg-gray-300 hover:bg-gray-500"
             >
               Cancel
