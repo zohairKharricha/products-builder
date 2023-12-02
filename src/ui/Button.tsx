@@ -9,7 +9,7 @@ interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 function Button({className, children, width = "w-full", ...rest}: IProps) {
   return (
     <button
-      className={`${className} ${width} text-white rounded-md p-2 duration-500 `}
+      className={`${className} ${width} rounded-lg text-white px-3 py-3 duration-200 font-medium`}
       {...rest}
     >
       {" "}
