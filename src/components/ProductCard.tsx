@@ -1,8 +1,8 @@
-import {numberWithCommas, txtSlicer} from "../utils/functions";
-import Image from "./Image";
 import {IProduct} from "../interfaces";
 import Button from "../ui/Button";
+import {numberWithCommas, txtSlicer} from "../utils/functions";
 import CircleColor from "./CircleColor";
+import Image from "./Image";
 
 interface IProps {
   product: IProduct;
@@ -10,12 +10,15 @@ interface IProps {
   openEditModal: () => void;
   setProductToEditIdx: (value: number) => void;
   idx: number;
+  openConfirmModal: () => void;
+  removeProductHandler: () => void;
 }
 function ProductCard({
   product,
   setProductToEdit,
   openEditModal,
   idx,
+  openConfirmModal,
   setProductToEditIdx,
 }: IProps) {
   // ** Render
@@ -27,6 +30,10 @@ function ProductCard({
     setProductToEdit(product);
     openEditModal();
     setProductToEditIdx(idx);
+  };
+  const onRemove = () => {
+    setProductToEdit(product);
+    openConfirmModal();
   };
   return (
     <div className="max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex flex-col">
@@ -61,7 +68,9 @@ function ProductCard({
         <Button onClick={onEdit} className="bg-indigo-700 hover:bg-indigo-800">
           Edit
         </Button>
-        <Button className="bg-red-700 hover:bg-red-800">Remove</Button>
+        <Button onClick={onRemove} className="bg-red-700 hover:bg-red-800">
+          Remove
+        </Button>
       </div>
     </div>
   );

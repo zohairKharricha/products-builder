@@ -11,6 +11,7 @@ import CircleColor from "./components/CircleColor";
 import {v4 as uuid} from "uuid";
 import Select from "./ui/Select";
 import {TProductName} from "./types";
+import toast, {Toaster} from "react-hot-toast";
 // Alt + shift + o
 function App() {
   const defaultProductObj = {
@@ -32,6 +33,7 @@ function App() {
   const [productToEditIdx, setProductToEditIdx] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
   const [tempColor, setTempColor] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
@@ -63,6 +65,13 @@ function App() {
 
   function openEditModal() {
     setIsOpenEditModal(true);
+  }
+  function closeConfirmModal() {
+    setIsOpenConfirmModal(false);
+  }
+
+  function openConfirmModal() {
+    setIsOpenConfirmModal(true);
   }
   function onChangeHandler(e: ChangeEvent<HTMLInputElement>) {
     setProduct({...product, [e.target.name]: e.target.value});
@@ -137,6 +146,18 @@ function App() {
 
     console.log("Send This Product To Our Server");
   }
+
+  function removeProductHandler() {
+    console.log("product id ", productToEdit.id);
+    const filtered = products.filter(
+      (product) => product.id !== productToEdit.id
+    );
+    setProducts(filtered);
+    closeConfirmModal();
+    toast.success("Product Removed Successfully", {
+      style: {backgroundColor: "#000", color: "#fff"},
+    });
+  }
   // ** Renders
   const renderProductList = products.map((product, idx) => (
     <ProductCard
@@ -146,6 +167,8 @@ function App() {
       product={product}
       setProductToEdit={setProductToEdit}
       openEditModal={openEditModal}
+      removeProductHandler={removeProductHandler}
+      openConfirmModal={openConfirmModal}
     />
   ));
 
@@ -322,6 +345,31 @@ function App() {
           </div>
         </form>
       </MyDialog>
+
+      {/* DELETE PRODUCT CONFIRM MODAL */}
+      <MyDialog
+        isOpen={isOpenConfirmModal}
+        closeModal={closeConfirmModal}
+        title="Are you sure you want to remove this Product from your Store?"
+        description="Deleting this product will remove it permanently from your inventory. Any associated data, sales history, and other related information will also be deleted. Please make sure this is the intended action."
+      >
+        <div className="flex items-center space-x-3">
+          <Button
+            className="bg-[#c2344d] hover:bg-red-800"
+            onClick={removeProductHandler}
+          >
+            Yes, remove
+          </Button>
+          <Button
+            type="button"
+            className="bg-[#f5f5fa] hover:bg-gray-300 !text-black"
+            onClick={closeConfirmModal}
+          >
+            Cancel
+          </Button>
+        </div>
+      </MyDialog>
+      <Toaster />
     </main>
   );
 }

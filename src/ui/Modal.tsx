@@ -5,9 +5,10 @@ interface IProps {
   isOpen: boolean;
   closeModal: () => void;
   title?: string;
+  description?: string;
   children: ReactNode;
 }
-function Modal({isOpen, closeModal, title, children}: IProps) {
+function Modal({isOpen, closeModal, title, children, description}: IProps) {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -46,6 +47,9 @@ function Modal({isOpen, closeModal, title, children}: IProps) {
                     </Dialog.Title>
                   )}
 
+                  {description && (
+                    <p className="text-sm text-gray-500 mt-3">{description}</p>
+                  )}
                   <div className="mt-4">{children}</div>
                 </Dialog.Panel>
               </Transition.Child>
